@@ -8,8 +8,9 @@ import Pendukung from "./routes/pendukung";
 import Dpt from "./routes/dpt";
 import Pengguna from "./routes/pengguna";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ModalsProvider } from "@mantine/modals";
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 const router = createBrowserRouter(
   [
@@ -99,7 +100,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <ModalsProvider>
+          <RouterProvider router={router} />
+        </ModalsProvider>
       </ThemeProvider >
     </QueryClientProvider>
   )
