@@ -1,34 +1,107 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createBrowserRouter, Link, RouterProvider } from "react-router-dom"
+import LoginPage from './routes/login';
+import ThemeProvider from "./theme";
+import AdminLayout from "./layout";
+import Beranda from "./routes/beranda";
+import Anggota from "./routes/anggota";
+import Pendukung from "./routes/pendukung";
+import Dpt from "./routes/dpt";
+import Pengguna from "./routes/pengguna";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient()
+
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <LoginPage />
+    },
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      handle: {
+        crumb: () => (
+          <Link key={Math.random()} to="/admin">
+            Admin
+          </Link>
+        ),
+      },
+      children: [
+        {
+          index: true,
+          path: "beranda",
+          element: <Beranda />,
+          handle: {
+            crumb: () => (
+              <Link key={Math.random()} to="/admin/beranda">
+                Beranda
+              </Link>
+            ),
+          },
+        },
+        {
+          path: "anggota",
+          element: <Anggota />,
+          handle: {
+            crumb: () => (
+              <Link key={Math.random()} to="/admin/anggota">
+                Anggota
+              </Link>
+            ),
+          },
+        },
+        {
+          path: "pendukung",
+          element: <Pendukung />,
+          handle: {
+            crumb: () => (
+              <Link key={Math.random()} to="/admin/pendukung">
+                Pendukung
+              </Link>
+            ),
+          },
+        },
+        {
+          path: "dpt",
+          element: <Dpt />,
+          handle: {
+            crumb: () => (
+              <Link key={Math.random()} to="/admin/dpt">
+                DPT
+              </Link>
+            ),
+          },
+        },
+        {
+          path: "pengguna",
+          element: <Pengguna />,
+          handle: {
+            crumb: () => (
+              <Link key={Math.random()} to="/admin/pengguna">
+                Pengguna
+              </Link>
+            ),
+          },
+        }
+      ]
+    },
+  ],
+  {
+    future: {
+      // Normalize `useNavigation()`/`useFetcher()` `formMethod` to uppercase
+      v7_normalizeFormMethod: true,
+    },
+  }
+)
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider >
+    </QueryClientProvider>
   )
 }
 
