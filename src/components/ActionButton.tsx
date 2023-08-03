@@ -49,9 +49,10 @@ export default function ActionButton({
             <ThemeIcon color="lime" variant="light" style={{ cursor: "pointer" }}>
                 <UnstyledButton
                     onClick={() => navigate(`${userId}/update`)}
-                    type="submit"
-                    name="action"
-                    value="updateStore">
+                // type="submit"
+                // name="action"
+                // value="updateStore"
+                >
                     <Edit size={20} />
                 </UnstyledButton>
             </ThemeIcon>

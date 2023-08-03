@@ -76,7 +76,7 @@ const DataTable: React.FC<Props> = ({ columns, data, visibility }) => {
                     <Select
                         value={String(table.getState().pagination.pageSize)}
                         data={[String(5), String(10), String(15), String(20)]}
-                        style={{ width: "4rem" }}
+                        style={{ width: "4.7rem" }}
                         onChange={(e) => table.setPageSize(Number(e))}
                     />
                     <Text size="sm">Data</Text>
@@ -145,7 +145,7 @@ const DataTable: React.FC<Props> = ({ columns, data, visibility }) => {
                     <Text size="sm">{`Halaman ${table.getState().pagination.pageIndex + 1
                         } dari  ${table.getPageCount()}`}</Text>
                     <Text size="sm">
-                        {table.getPrePaginationRowModel().rows.length} Baris
+                        Total {table.getPrePaginationRowModel().rows.length} Baris
                     </Text>
                 </Group>
                 <Pagination

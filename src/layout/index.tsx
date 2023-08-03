@@ -29,7 +29,6 @@ export default function AdminLayout() {
             <Flex justify="flex-start" direction="column" align="flex-start" wrap="wrap" >
                 <Group position="apart" px="md">
                     <Breadcrumbs>{crumbs.map((crumb) => crumb)}</Breadcrumbs>
-
                 </Group>
                 <Outlet />
             </Flex>

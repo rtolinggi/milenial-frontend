@@ -1,12 +1,12 @@
 
-import TableUser from "./TablePengguna";
+import { Outlet } from "react-router-dom";
 
 export default function Pengguna() {
 
 
     return (
         <>
-            <TableUser />
+            <Outlet />
         </>
     )
 }

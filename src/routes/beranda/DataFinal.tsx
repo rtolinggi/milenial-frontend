@@ -44,7 +44,7 @@ export default function DataFinal({ data }: StatsGridIconsProps) {
                     <Text component="span" c={stat.diff > 0 ? 'teal' : 'red'} fw={700}>
                         {stat.diff}%
                     </Text>{' '}
-                    {stat.diff > 0 ? 'increase' : 'decrease'} compared to last month
+                    {stat.diff > 0 ? 'kenaikan' : 'penurunan'} berbanding dengan bulan kemarin
                 </Text>
             </Paper>
         );

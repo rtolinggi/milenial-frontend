@@ -9,6 +9,11 @@ import Dpt from "./routes/dpt";
 import Pengguna from "./routes/pengguna";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ModalsProvider } from "@mantine/modals";
+import PostPengguna from "./routes/pengguna/post";
+import TableUser from "./routes/pengguna/TablePengguna";
+import DetailPengguna from "./routes/pengguna/detail";
+import UpdatePengguna from "./routes/pengguna/update";
+import { Notifications } from '@mantine/notifications'
 
 export const queryClient = new QueryClient()
 
@@ -40,6 +45,56 @@ const router = createBrowserRouter(
               </Link>
             ),
           },
+        },
+        {
+          path: "pengguna",
+          element: <Pengguna />,
+          handle: {
+            crumb: () => (
+              <Link key={Math.random()} to="/admin/pengguna">
+                Pengguna
+              </Link>
+            ),
+          },
+          children: [
+            {
+              element: <TableUser />,
+              index: true
+            },
+            {
+              path: ":id/update",
+              element: <UpdatePengguna />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="#">
+                    Perbarui
+                  </Link>
+                )
+              }
+            },
+            {
+              path: ":id/detail",
+              element: <DetailPengguna />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="#">
+                    Detail
+                  </Link>
+                ),
+              }
+            },
+            {
+              path: "post",
+              element: <PostPengguna />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="#">
+                    Tambah
+                  </Link>
+                )
+              }
+            },
+          ]
         },
         {
           path: "anggota",
@@ -74,17 +129,6 @@ const router = createBrowserRouter(
             ),
           },
         },
-        {
-          path: "pengguna",
-          element: <Pengguna />,
-          handle: {
-            crumb: () => (
-              <Link key={Math.random()} to="/admin/pengguna">
-                Pengguna
-              </Link>
-            ),
-          },
-        }
       ]
     },
   ],
@@ -101,6 +145,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <ModalsProvider>
+          <Notifications position="top-right" />
           <RouterProvider router={router} />
         </ModalsProvider>
       </ThemeProvider >

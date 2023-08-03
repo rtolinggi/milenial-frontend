@@ -10,7 +10,7 @@ export default function HeaderLayout({ opened }: stateNavbar) {
     return (
         <Navbar hidden={opened} hiddenBreakpoint={"sm"} height={"calc(100vh - 60px)"} p="xs" width={{ base: 250 }} sx={(theme) => ({
             backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark : theme.white,
-            boxShadow: theme.shadows.md
+            boxShadow: theme.shadows.md,
         })}>
             <Navbar.Section grow mt="md" component={ScrollArea}>
                 <NavContent />

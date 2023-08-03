@@ -34,7 +34,7 @@ export default function HeaderLayout({ initialState, handler }: Props) {
 
                 <Group spacing={"sm"}>
                     <Image src={image} width={55} />
-                    <Text fz={"xl"} fw={900} variant="gradient">Milenial Sulut</Text>
+                    <Text fz={"md"} fw={900} variant="gradient">MILENIAL SULUT</Text>
                 </Group>
                 <DarkMode />
             </div>
