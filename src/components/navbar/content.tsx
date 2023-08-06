@@ -12,9 +12,9 @@ const data = [
     },
     {
         icon: HiUserPlus,
-        label: "Anggota",
-        to: "anggota",
-        pathName: "/anggota",
+        label: "Relawan",
+        to: "relawan",
+        pathName: "/relawan",
     },
     {
         icon: HiUserGroup,

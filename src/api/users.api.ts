@@ -1,13 +1,7 @@
-import axios, { AxiosError } from "axios";
+import { instance } from './axios.api';
+import { AxiosError } from 'axios'
 import type { InputSignUp, InputUpdateUser } from './type.api';
 
-const instance = axios.create({
-    baseURL: 'http://localhost:5000/api/v1/',
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json'
-    }
-})
 
 export const GetUsers = async () => {
     try {
@@ -20,6 +14,27 @@ export const GetUsers = async () => {
     }
 }
 
+export const GetUsersWithRelawan = async () => {
+    try {
+        const result = await instance.get('users/petugas');
+        const response = await result.data;
+        return response;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err.response?.data;
+    }
+}
+
+export const GetUsersByid = async (id: string) => {
+    try {
+        const result = await instance.get(`users/${id}`);
+        const response = await result.data;
+        return response
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err.response?.data;
+    }
+}
 export const PostUser = async (payload: InputSignUp) => {
     try {
         const result = await instance.post('auth/signup', payload);

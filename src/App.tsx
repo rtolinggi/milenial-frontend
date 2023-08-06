@@ -3,7 +3,7 @@ import LoginPage from './routes/login';
 import ThemeProvider from "./theme";
 import AdminLayout from "./layout";
 import Beranda from "./routes/beranda";
-import Anggota from "./routes/anggota";
+import Relawan from "./routes/relawan";
 import Pendukung from "./routes/pendukung";
 import Dpt from "./routes/dpt";
 import Pengguna from "./routes/pengguna";
@@ -14,6 +14,8 @@ import TableUser from "./routes/pengguna/TablePengguna";
 import DetailPengguna from "./routes/pengguna/detail";
 import UpdatePengguna from "./routes/pengguna/update";
 import { Notifications } from '@mantine/notifications'
+import ContentRelawan from "./routes/relawan/ContentRelawan";
+import PostRelawan from "./routes/relawan/post";
 
 export const queryClient = new QueryClient()
 
@@ -97,15 +99,32 @@ const router = createBrowserRouter(
           ]
         },
         {
-          path: "anggota",
-          element: <Anggota />,
+          path: "relawan",
+          element: <Relawan />,
           handle: {
             crumb: () => (
-              <Link key={Math.random()} to="/admin/anggota">
-                Anggota
+              <Link key={Math.random()} to="/admin/relawan">
+                Relawan
               </Link>
             ),
           },
+          children: [
+            {
+              index: true,
+              element: <ContentRelawan />
+            },
+            {
+              path: 'post',
+              element: <PostRelawan />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="#">
+                    Tambah
+                  </Link>
+                ),
+              },
+            }
+          ]
         },
         {
           path: "pendukung",

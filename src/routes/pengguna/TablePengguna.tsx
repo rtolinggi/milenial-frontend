@@ -21,7 +21,7 @@ type DataUsers = {
     CreatedAt: number;
     UpdatedAt: number;
 }
-type ResponseUsers = {
+export type ResponseUsers = {
     code: number;
     data: {
         users: Array<DataUsers>

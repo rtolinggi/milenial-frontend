@@ -1,0 +1,686 @@
+[
+  {
+    "id": "71.01.05",
+    "name": "Sang Tombolang"
+  },
+  {
+    "id": "71.01.09",
+    "name": "Dumoga Barat"
+  },
+  {
+    "id": "71.01.10",
+    "name": "Dumoga Timur"
+  },
+  {
+    "id": "71.01.11",
+    "name": "Dumoga Utara"
+  },
+  {
+    "id": "71.01.12",
+    "name": "Lolak"
+  },
+  {
+    "id": "71.01.13",
+    "name": "Bolaang"
+  },
+  {
+    "id": "71.01.14",
+    "name": "Lolayan"
+  },
+  {
+    "id": "71.01.19",
+    "name": "Passi Barat"
+  },
+  {
+    "id": "71.01.20",
+    "name": "Poigar"
+  },
+  {
+    "id": "71.01.22",
+    "name": "Passi Timur"
+  },
+  {
+    "id": "71.01.31",
+    "name": "Bolaang Timur"
+  },
+  {
+    "id": "71.01.32",
+    "name": "Bilalang"
+  },
+  {
+    "id": "71.01.33",
+    "name": "Dumoga"
+  },
+  {
+    "id": "71.01.34",
+    "name": "Dumoga Tenggara"
+  },
+  {
+    "id": "71.01.35",
+    "name": "Dumoga Tengah"
+  },
+  {
+    "id": "71.02.01",
+    "name": "Tondano Barat"
+  },
+  {
+    "id": "71.02.02",
+    "name": "Tondano Timur"
+  },
+  {
+    "id": "71.02.03",
+    "name": "Eris"
+  },
+  {
+    "id": "71.02.04",
+    "name": "Kombi"
+  },
+  {
+    "id": "71.02.05",
+    "name": "Lembean Timur"
+  },
+  {
+    "id": "71.02.06",
+    "name": "Kakas"
+  },
+  {
+    "id": "71.02.07",
+    "name": "Tompaso"
+  },
+  {
+    "id": "71.02.08",
+    "name": "Remboken"
+  },
+  {
+    "id": "71.02.09",
+    "name": "Langowan Timur"
+  },
+  {
+    "id": "71.02.10",
+    "name": "Langowan Barat"
+  },
+  {
+    "id": "71.02.11",
+    "name": "Sonder"
+  },
+  {
+    "id": "71.02.12",
+    "name": "Kawangkoan"
+  },
+  {
+    "id": "71.02.13",
+    "name": "Pineleng"
+  },
+  {
+    "id": "71.02.14",
+    "name": "Tombulu"
+  },
+  {
+    "id": "71.02.15",
+    "name": "Tombariri"
+  },
+  {
+    "id": "71.02.16",
+    "name": "Tondano Utara"
+  },
+  {
+    "id": "71.02.17",
+    "name": "Langowan Selatan"
+  },
+  {
+    "id": "71.02.18",
+    "name": "Tondano Selatan"
+  },
+  {
+    "id": "71.02.19",
+    "name": "Langowan Utara"
+  },
+  {
+    "id": "71.02.20",
+    "name": "Kakas Barat"
+  },
+  {
+    "id": "71.02.21",
+    "name": "Kawangkoan Utara"
+  },
+  {
+    "id": "71.02.22",
+    "name": "Kawangkoan Barat"
+  },
+  {
+    "id": "71.02.23",
+    "name": "Mandolang"
+  },
+  {
+    "id": "71.02.24",
+    "name": "Tombariri Timur"
+  },
+  {
+    "id": "71.02.25",
+    "name": "Tompaso Barat"
+  },
+  {
+    "id": "71.03.08",
+    "name": "Tabukan Utara"
+  },
+  {
+    "id": "71.03.09",
+    "name": "Nusa Tabukan"
+  },
+  {
+    "id": "71.03.10",
+    "name": "Manganitu Selatan"
+  },
+  {
+    "id": "71.03.11",
+    "name": "Tatoareng"
+  },
+  {
+    "id": "71.03.12",
+    "name": "Tamako"
+  },
+  {
+    "id": "71.03.13",
+    "name": "Manganitu"
+  },
+  {
+    "id": "71.03.14",
+    "name": "Tabukan Tengah"
+  },
+  {
+    "id": "71.03.15",
+    "name": "Tabukan Selatan"
+  },
+  {
+    "id": "71.03.16",
+    "name": "Kendahe"
+  },
+  {
+    "id": "71.03.17",
+    "name": "Tahuna"
+  },
+  {
+    "id": "71.03.19",
+    "name": "Tabukan Selatan Tengah"
+  },
+  {
+    "id": "71.03.20",
+    "name": "Tabukan Selatan Tenggara"
+  },
+  {
+    "id": "71.03.23",
+    "name": "Tahuna Barat"
+  },
+  {
+    "id": "71.03.24",
+    "name": "Tahuna Timur"
+  },
+  {
+    "id": "71.03.25",
+    "name": "Kepulauan Marore"
+  },
+  {
+    "id": "71.04.01",
+    "name": "Lirung"
+  },
+  {
+    "id": "71.04.02",
+    "name": "Beo"
+  },
+  {
+    "id": "71.04.03",
+    "name": "Rainis"
+  },
+  {
+    "id": "71.04.04",
+    "name": "Essang"
+  },
+  {
+    "id": "71.04.05",
+    "name": "Nanusa"
+  },
+  {
+    "id": "71.04.06",
+    "name": "Kabaruan"
+  },
+  {
+    "id": "71.04.07",
+    "name": "Melonguane"
+  },
+  {
+    "id": "71.04.08",
+    "name": "Gemeh"
+  },
+  {
+    "id": "71.04.09",
+    "name": "Damau"
+  },
+  {
+    "id": "71.04.10",
+    "name": "Tampan' Amma"
+  },
+  {
+    "id": "71.04.11",
+    "name": "Salibabu"
+  },
+  {
+    "id": "71.04.12",
+    "name": "Kalongan"
+  },
+  {
+    "id": "71.04.13",
+    "name": "Miangas"
+  },
+  {
+    "id": "71.04.14",
+    "name": "Beo Utara"
+  },
+  {
+    "id": "71.04.15",
+    "name": "Pulutan"
+  },
+  {
+    "id": "71.04.16",
+    "name": "Melonguane Timur"
+  },
+  {
+    "id": "71.04.17",
+    "name": "Moronge"
+  },
+  {
+    "id": "71.04.18",
+    "name": "Beo Selatan"
+  },
+  {
+    "id": "71.04.19",
+    "name": "Essang Selatan"
+  },
+  {
+    "id": "71.05.01",
+    "name": "Modoinding"
+  },
+  {
+    "id": "71.05.02",
+    "name": "Tompaso Baru"
+  },
+  {
+    "id": "71.05.03",
+    "name": "Ranoyapo"
+  },
+  {
+    "id": "71.05.07",
+    "name": "Motoling"
+  },
+  {
+    "id": "71.05.08",
+    "name": "Sinonsayang"
+  },
+  {
+    "id": "71.05.09",
+    "name": "Tenga"
+  },
+  {
+    "id": "71.05.10",
+    "name": "Amurang"
+  },
+  {
+    "id": "71.05.12",
+    "name": "Tumpaan"
+  },
+  {
+    "id": "71.05.13",
+    "name": "Tareran"
+  },
+  {
+    "id": "71.05.15",
+    "name": "Kumelembuai"
+  },
+  {
+    "id": "71.05.16",
+    "name": "Maesaan"
+  },
+  {
+    "id": "71.05.17",
+    "name": "Amurang Barat"
+  },
+  {
+    "id": "71.05.18",
+    "name": "Amurang Timur"
+  },
+  {
+    "id": "71.05.19",
+    "name": "Tatapaan"
+  },
+  {
+    "id": "71.05.21",
+    "name": "Motoling Barat"
+  },
+  {
+    "id": "71.05.22",
+    "name": "Motoling Timur"
+  },
+  {
+    "id": "71.05.23",
+    "name": "Suluun Tareran"
+  },
+  {
+    "id": "71.06.01",
+    "name": "Kema"
+  },
+  {
+    "id": "71.06.02",
+    "name": "Kauditan"
+  },
+  {
+    "id": "71.06.03",
+    "name": "Airmadidi"
+  },
+  {
+    "id": "71.06.04",
+    "name": "Wori"
+  },
+  {
+    "id": "71.06.05",
+    "name": "Dimembe"
+  },
+  {
+    "id": "71.06.06",
+    "name": "Likupang Barat"
+  },
+  {
+    "id": "71.06.07",
+    "name": "Likupang Timur"
+  },
+  {
+    "id": "71.06.08",
+    "name": "Kalawat"
+  },
+  {
+    "id": "71.06.09",
+    "name": "Talawaan"
+  },
+  {
+    "id": "71.06.10",
+    "name": "Likupang Selatan"
+  },
+  {
+    "id": "71.07.01",
+    "name": "Ratahan"
+  },
+  {
+    "id": "71.07.02",
+    "name": "Pusomaen"
+  },
+  {
+    "id": "71.07.03",
+    "name": "Belang"
+  },
+  {
+    "id": "71.07.04",
+    "name": "Ratatotok"
+  },
+  {
+    "id": "71.07.05",
+    "name": "Tombatu"
+  },
+  {
+    "id": "71.07.06",
+    "name": "Touluaan"
+  },
+  {
+    "id": "71.07.07",
+    "name": "Touluaan Selatan"
+  },
+  {
+    "id": "71.07.08",
+    "name": "Silian Raya"
+  },
+  {
+    "id": "71.07.09",
+    "name": "Tombatu Timur"
+  },
+  {
+    "id": "71.07.10",
+    "name": "Tombatu Utara"
+  },
+  {
+    "id": "71.07.11",
+    "name": "Pasan"
+  },
+  {
+    "id": "71.07.12",
+    "name": "Ratahan Timur"
+  },
+  {
+    "id": "71.08.01",
+    "name": "Sangkub"
+  },
+  {
+    "id": "71.08.02",
+    "name": "Bintauna"
+  },
+  {
+    "id": "71.08.03",
+    "name": "Bolangitang Timur"
+  },
+  {
+    "id": "71.08.04",
+    "name": "Bolangitang Barat"
+  },
+  {
+    "id": "71.08.05",
+    "name": "Kaidipang"
+  },
+  {
+    "id": "71.08.06",
+    "name": "Pinogaluman"
+  },
+  {
+    "id": "71.09.01",
+    "name": "Siau Timur"
+  },
+  {
+    "id": "71.09.02",
+    "name": "Siau Barat"
+  },
+  {
+    "id": "71.09.03",
+    "name": "Tagulandang"
+  },
+  {
+    "id": "71.09.04",
+    "name": "Siau Timur Selatan"
+  },
+  {
+    "id": "71.09.05",
+    "name": "Siau Barat Selatan"
+  },
+  {
+    "id": "71.09.06",
+    "name": "Tagulandang Utara"
+  },
+  {
+    "id": "71.09.07",
+    "name": "Biaro"
+  },
+  {
+    "id": "71.09.08",
+    "name": "Siau Barat Utara"
+  },
+  {
+    "id": "71.09.09",
+    "name": "Siau Tengah"
+  },
+  {
+    "id": "71.09.10",
+    "name": "Tagulandang Selatan"
+  },
+  {
+    "id": "71.10.01",
+    "name": "Tutuyan"
+  },
+  {
+    "id": "71.10.02",
+    "name": "Kotabunan"
+  },
+  {
+    "id": "71.10.03",
+    "name": "Nuangan"
+  },
+  {
+    "id": "71.10.04",
+    "name": "Modayag"
+  },
+  {
+    "id": "71.10.05",
+    "name": "Modayag Barat"
+  },
+  {
+    "id": "71.10.06",
+    "name": "Motongkad"
+  },
+  {
+    "id": "71.10.07",
+    "name": "Mooat"
+  },
+  {
+    "id": "71.11.01",
+    "name": "Bolaang Uki"
+  },
+  {
+    "id": "71.11.02",
+    "name": "Posigadan"
+  },
+  {
+    "id": "71.11.03",
+    "name": "Pinolosian"
+  },
+  {
+    "id": "71.11.04",
+    "name": "Pinolosian Tengah"
+  },
+  {
+    "id": "71.11.05",
+    "name": "Pinolosian Timur"
+  },
+  {
+    "id": "71.11.06",
+    "name": "Helumo"
+  },
+  {
+    "id": "71.11.07",
+    "name": "Tomini"
+  },
+  {
+    "id": "71.71.01",
+    "name": "Bunaken"
+  },
+  {
+    "id": "71.71.02",
+    "name": "Tuminiting"
+  },
+  {
+    "id": "71.71.03",
+    "name": "Singkil"
+  },
+  {
+    "id": "71.71.04",
+    "name": "Wenang"
+  },
+  {
+    "id": "71.71.05",
+    "name": "Tikala"
+  },
+  {
+    "id": "71.71.06",
+    "name": "Sario"
+  },
+  {
+    "id": "71.71.07",
+    "name": "Wanea"
+  },
+  {
+    "id": "71.71.08",
+    "name": "Mapanget"
+  },
+  {
+    "id": "71.71.09",
+    "name": "Malalayang"
+  },
+  {
+    "id": "71.71.10",
+    "name": "Bunaken Kepulauan"
+  },
+  {
+    "id": "71.71.11",
+    "name": "Paal Dua"
+  },
+  {
+    "id": "71.72.01",
+    "name": "Lembeh Selatan"
+  },
+  {
+    "id": "71.72.02",
+    "name": "Madidir"
+  },
+  {
+    "id": "71.72.03",
+    "name": "Ranowulu"
+  },
+  {
+    "id": "71.72.04",
+    "name": "Aertembaga"
+  },
+  {
+    "id": "71.72.05",
+    "name": "Matuari"
+  },
+  {
+    "id": "71.72.06",
+    "name": "Girian"
+  },
+  {
+    "id": "71.72.07",
+    "name": "Maesa"
+  },
+  {
+    "id": "71.72.08",
+    "name": "Lembeh Utara"
+  },
+  {
+    "id": "71.73.01",
+    "name": "Tomohon Selatan"
+  },
+  {
+    "id": "71.73.02",
+    "name": "Tomohon Tengah"
+  },
+  {
+    "id": "71.73.03",
+    "name": "Tomohon Utara"
+  },
+  {
+    "id": "71.73.04",
+    "name": "Tomohon Barat"
+  },
+  {
+    "id": "71.73.05",
+    "name": "Tomohon Timur"
+  },
+  {
+    "id": "71.74.01",
+    "name": "Kotamobagu Utara"
+  },
+  {
+    "id": "71.74.02",
+    "name": "Kotamobagu Timur"
+  },
+  {
+    "id": "71.74.03",
+    "name": "Kotamobagu Selatan"
+  },
+  {
+    "id": "71.74.04",
+    "name": "Kotamobagu Barat"
+  }
+]

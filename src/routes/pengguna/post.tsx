@@ -16,14 +16,14 @@ const schema = z
             .min(6, { message: 'nama pengguna minimal 6 karakter' }),
         role: z.enum(ROLE, {
             invalid_type_error: 'tipe data tidak valid',
+            required_error: "role harus di isi"
         }),
-        password: z
-            .string()
-            .min(6, { message: 'Kata Sandi Minimal 6 Karakter' }),
+        password: z.string({ required_error: "password tidak bisa kosong" })
+            .min(6, { message: "password minimal 6 karakter" }),
         confirmPassword: z.string().optional(),
     })
     .refine(data => data.password === data.confirmPassword, {
-        message: 'Kati Sandi dan Konfirmasi Sandi Tidak Cocok',
+        message: 'Kata Sandi dan Konfirmasi Sandi Tidak Cocok',
         path: ['confirmPassword'],
     });
 
@@ -81,6 +81,7 @@ export default function PostPengguna() {
 
 
     const handleSubmit = (val: InputForm) => {
+        console.log(val)
         notifications.show({
             id: 'post-user',
             color: 'blue',
@@ -110,11 +111,12 @@ export default function PostPengguna() {
                             label='Username'
                             autoComplete='username'
                             icon={<User size={18} />}
-                            {...form.getInputProps('username')}
+                            {...form.getInputProps("username")}
                         />
                         <PasswordInput
                             withAsterisk
                             label='Kata Sandi'
+                            autoComplete="kata sandi"
                             icon={<Lock size={18} />}
                             mt='md'
                             {...form.getInputProps('password')}
@@ -122,6 +124,7 @@ export default function PostPengguna() {
                         <PasswordInput
                             withAsterisk
                             label='Konfirmasi Sandi'
+                            autoComplete="konfirmasi sandi"
                             icon={<Lock size={18} />}
                             mt='md'
                             {...form.getInputProps('confirmPassword')}

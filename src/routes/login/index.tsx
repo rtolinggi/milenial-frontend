@@ -26,6 +26,8 @@ const useStyles = createStyles((theme) => ({
             theme.colorScheme === "dark"
                 ? "rgba(0,0,0,0.9)"
                 : "rgba(255,255,255,0.05)",
+        backgroundImage: "URL(background.jpg)",
+        backgroundSize: 'cover',
     },
     circle: {
         position: "absolute",
@@ -60,7 +62,7 @@ const schema = z.object({
 // type InputForm = z.infer<typeof schema>;
 
 const AuthLayout: React.FC = () => {
-    const { classes, cx } = useStyles();
+    const { classes } = useStyles();
     const form = useForm({
         validate: zodResolver(schema),
         initialValues: {
@@ -71,20 +73,6 @@ const AuthLayout: React.FC = () => {
 
     return (
         <Box className={classes.root}>
-            <Box
-                className={cx(
-                    classes.circle,
-                    classes.positionCircleTop,
-                    classes.gardient1
-                )}
-            />
-            <Box
-                className={cx(
-                    classes.circle,
-                    classes.positionCircleBottom,
-                    classes.gardient2
-                )}
-            />
             <Center style={{ minHeight: "100vh", width: "100%" }}>
                 <main>
                     <Paper
@@ -97,9 +85,10 @@ const AuthLayout: React.FC = () => {
                                 theme.colorScheme === 'dark'
                                     ? 'rgba(0,0,0,0.6)'
                                     : 'rgba(255,255,255,0.1)',
-                            backdropFilter: 'blur(5px)',
+                            backdropFilter: 'blur(8px)',
                             minWidth: '320px',
                             margin: 'auto',
+                            zIndex: 2000,
                         })}>
                         {/* <LoadingOverlay visible={mutation.isLoading} /> */}
                         <Center>
