@@ -1,5 +1,5 @@
 import { Avatar, Box, Card, Center, Divider, Flex, Group, Text, createStyles, rem } from "@mantine/core";
-import { MapPin, UserCheck } from "tabler-icons-react";
+import { MapPin, UserCheck, Anchor } from "tabler-icons-react";
 // import { Petugas } from "../api/type.api";
 
 const useStyles = createStyles((theme) => ({
@@ -50,7 +50,7 @@ export default function CardAvatar(data: any) {
                 <Group spacing='xs' position="apart">
                     <Flex justify='center' align='center'>
                         <UserCheck color="green" width={15} />
-                        <Text ml={5} align="start" size={12} weight='bold'>{data.data.id_jabatan}</Text>
+                        <Text ml={5} align="start" size={12} weight='bold'>Total Pendukung</Text>
                     </Flex>
                     <Text size={12} align="center" >120.000</Text>
                 </Group>
@@ -59,9 +59,16 @@ export default function CardAvatar(data: any) {
                 <Group spacing='xs' position="apart">
                     <Flex justify='center' align='center'>
                         <MapPin color="red" width={15} />
-                        <Text ml={5} align="start" size={12} weight='bold'>Area</Text>
+                        <Text ml={5} align="start" size={12} weight='bold'>Basis</Text>
                     </Flex>
                     <Text size={12} align="center" >Malalayang</Text>
+                </Group>
+                <Group spacing='xs' position="apart">
+                    <Flex justify='center' align='center'>
+                        <Anchor color="indigo" width={15} />
+                        <Text ml={5} align="start" size={12} weight='bold'>Jabatan</Text>
+                    </Flex>
+                    <Text size={12} align="center" >Anggota</Text>
                 </Group>
             </Box>
         </Card >

@@ -4,28 +4,33 @@ import { Search, UserPlus } from "tabler-icons-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { GetRelawanPagination } from "../../api/relawan.api";
-import { ResponseRelawanWithPagination } from "../../api/type.api";
+import { Petugas, ResponseRelawanWithPagination } from "../../api/type.api";
 import { useState } from 'react';
-
-
 
 export default function ContentRelawan() {
     const navigate = useNavigate();
-
     const [getRow, setGetRow] = useState<number>(10);
     const [getPage, setGetPage] = useState<number>(1);
+    const [dataRelawan, setDataRelawan] = useState<Array<Petugas> | undefined>(undefined)
 
-    const queryRelawan = function GetDataRelawan(page: number, perPage: number) {
-        const query = useQuery<ResponseRelawanWithPagination>(
-            {
-                queryKey: ['GetRelawanWithPagination', page, perPage],
-                queryFn: () => GetRelawanPagination(page, perPage),
-            }
-        );
-        return query;
+    const { data: relawan, isLoading } = useQuery<ResponseRelawanWithPagination>({
+        queryKey: ['getRelawanPagination', getPage, getRow],
+        queryFn: () => GetRelawanPagination(getPage, getRow),
+        keepPreviousData: true,
+    })
+
+    const handleFilter = (val: React.ChangeEvent<HTMLInputElement>) => {
+        const dataResult = relawan?.data.petugas.filter((petugas) => {
+            const search = val.target.value.toLowerCase();
+            return petugas.nama_lengkap.toLowerCase().includes(search) ||
+                petugas.telpon.includes(search)
+        })
+        setDataRelawan(dataResult);
+
     }
 
-    const { data: relawan, isLoading } = queryRelawan(getPage, getRow);
+
+
     return (
         <>
             <Paper shadow='sm' radius='md' w='100%' p={12} sx={(theme) => ({
@@ -56,6 +61,7 @@ export default function ContentRelawan() {
                         <TextInput
                             placeholder="Cari Data...."
                             icon={<Search size={20} />}
+                            onChange={handleFilter}
                         />
                     </Group>
                     <Group spacing="xs" position="right">
@@ -64,7 +70,12 @@ export default function ContentRelawan() {
                             value={getRow.toString()}
                             data={[String(10), String(20), String(30), String(40)]}
                             style={{ width: "4.7rem" }}
-                            onChange={(val: any) => setGetRow(val)}
+                            onChange={(val: any) => {
+                                console.log(val)
+                                if (relawan) {
+                                    setGetRow(val)
+                                }
+                            }}
                         />
                         <Text size="sm">Data</Text>
                     </Group>
@@ -78,22 +89,26 @@ export default function ContentRelawan() {
                     ]}
                 >
                     {
-                        relawan?.data.petugas.map((item) => {
+                        dataRelawan && relawan ? dataRelawan.map((item) => {
                             return (
                                 <CardAvatar data={item} key={item.id} />
                             )
 
+                        }) : relawan?.data.petugas.map((item) => {
+                            return (
+                                <CardAvatar data={item} key={item.id} />
+                            )
                         })
                     }
                 </SimpleGrid>
                 <Group mt={20} position="apart" >
-                    <Text size='sm' >Halaman {relawan && relawan.data.paginations.currentPage}
-                        dari {relawan && relawan.data.paginations.totalPages} Total {relawan && relawan.data.paginations.total} Relawan</Text>
+                    <Text size='sm' >`Halaman {getPage + " "}
+                        dari {relawan && relawan.data.paginations.totalPages} Total {relawan && relawan.data.paginations.total} Relawan`</Text>
                     <Pagination
-                        total={relawan ? relawan?.data.paginations.totalPages : 0}
+                        total={relawan ? relawan.data.paginations.totalPages : 0}
                         // defaultValue={getPage}
                         onChange={(page) => {
-                            setGetRow(page)
+                            setGetPage(page)
                         }}
                         styles={(theme) => ({
                             control: {

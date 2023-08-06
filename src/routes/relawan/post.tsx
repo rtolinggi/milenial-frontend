@@ -170,7 +170,7 @@ export default function PostRelawan() {
 
     const selectJabatan = jabatan?.data.jabatan_petugas.map((item) => {
         return {
-            label: item.Position,
+            label: item.nama_jabatan,
             value: item.ID,
         }
     })
@@ -302,6 +302,7 @@ export default function PostRelawan() {
                                         label='Jenis Kelamin'
                                         mt='md'
                                         placeholder="Jenis Kelamin..."
+                                        nothingFound="Kota/Kabupaten tidak ditemukan"
                                         data={[
                                             { label: "Laki-Laki", value: "Lk" },
                                             { label: "Perepuan", value: "Pr" },

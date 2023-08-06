@@ -80,6 +80,6 @@ export interface Petugas {
 
 export interface Jabatan {
     ID: string;
-    Position: string;
-    Description: string;
+    nama_jabatan: string;
+    keterangan: string;
 }
