@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Group, Image, Paper, Select, SimpleGrid, Text, TextInput, Textarea, Title, createStyles, rem } from "@mantine/core";
+import { Box, Button, Divider, Group, Image, LoadingOverlay, Paper, Select, SimpleGrid, Text, TextInput, Textarea, Title, createStyles, rem } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 
 import { Form, useNavigate } from "react-router-dom";
@@ -253,7 +253,7 @@ export default function PostRelawan() {
     return (
         <>
             <Box style={{ position: 'relative', width: '100%' }}>
-                {/* <LoadingOverlay visible={mutation.isLoading} /> */}
+                <LoadingOverlay visible={mutation.isLoading} />
                 <Form onSubmit={
                     form.onSubmit((val: any) => handleSubmit(val))
                 }  >

@@ -17,6 +17,7 @@ export default function DetailPengguna() {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryData = queryClient.getQueryState<ResponseApi<User>>("GetUsers")
+    console.log(queryData)
     const data = queryData?.data
     const user = data?.data.users?.filter((user) => user.ID === id).map((value) => {
         return {

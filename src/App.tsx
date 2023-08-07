@@ -1,4 +1,5 @@
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom"
+import { ReactQueryDevtools } from 'react-query/devtools';
 import LoginPage from './routes/login';
 import ThemeProvider from "./theme";
 import AdminLayout from "./layout";
@@ -16,6 +17,7 @@ import UpdatePengguna from "./routes/pengguna/update";
 import { Notifications } from '@mantine/notifications'
 import ContentRelawan from "./routes/relawan/ContentRelawan";
 import PostRelawan from "./routes/relawan/post";
+import DetailRelawan from "./routes/relawan/DetailRelawan";
 
 export const queryClient = new QueryClient()
 
@@ -123,7 +125,18 @@ const router = createBrowserRouter(
                   </Link>
                 ),
               },
-            }
+            },
+            {
+              path: ':id/detail',
+              element: <DetailRelawan />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="#">
+                    Detail
+                  </Link>
+                )
+              }
+            },
           ]
         },
         {
@@ -166,6 +179,7 @@ function App() {
         <ModalsProvider>
           <Notifications position="top-right" />
           <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen />
         </ModalsProvider>
       </ThemeProvider >
     </QueryClientProvider>

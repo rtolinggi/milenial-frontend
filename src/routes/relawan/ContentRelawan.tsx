@@ -91,14 +91,15 @@ export default function ContentRelawan() {
                     {
                         dataRelawan && relawan ? dataRelawan.map((item) => {
                             return (
-                                <CardAvatar data={item} key={item.id} />
+                                <CardAvatar data={item} key={item.id} row={getRow} page={getPage} />
                             )
 
-                        }) : relawan?.data.petugas.map((item) => {
-                            return (
-                                <CardAvatar data={item} key={item.id} />
-                            )
-                        })
+                        }) :
+                            relawan?.data.petugas.map((item) => {
+                                return (
+                                    <CardAvatar data={item} key={item.id} row={getRow} page={getPage} />
+                                )
+                            })
                     }
                 </SimpleGrid>
                 <Group mt={20} position="apart" >

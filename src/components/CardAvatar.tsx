@@ -1,5 +1,7 @@
 import { Avatar, Box, Card, Center, Divider, Flex, Group, Text, createStyles, rem } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import { MapPin, UserCheck, Anchor } from "tabler-icons-react";
+import { Petugas } from "../api/type.api";
 // import { Petugas } from "../api/type.api";
 
 const useStyles = createStyles((theme) => ({
@@ -31,13 +33,31 @@ const useStyles = createStyles((theme) => ({
     },
 }))
 
-export default function CardAvatar(data: any) {
+type Props = {
+    data: Petugas;
+    page: number;
+    row: number;
+}
+
+export default function CardAvatar(data: Props) {
     const { classes } = useStyles();
+    const navigate = useNavigate();
     return (
         <Card className={classes.root} radius='md' withBorder>
             <Card.Section >
                 <Center className={classes.wrapper}>
-                    <Avatar variant="gradient" className={classes.avatar} bottom={-40} src={`http://localhost:5000/public/foto-relawan/${data.data.avatar}`} />
+                    <Avatar
+                        variant="gradient"
+                        className={classes.avatar}
+                        bottom={-40}
+                        src={`http://localhost:5000/public/foto-relawan/${data.data.avatar}`}
+                        onClick={() => navigate(`${data.data.id}/detail`, {
+                            state: {
+                                page: data.page,
+                                row: data.row
+                            }
+                        })}
+                    />
                 </Center>
             </Card.Section>
             <Box mt="4.2rem" >
