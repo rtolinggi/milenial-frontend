@@ -104,7 +104,7 @@ export default function TableUser() {
 
     const dataTable = users
         ? users.data.users.map(item => {
-            let data = {
+            const data = {
                 id: String(item.ID),
                 nama_pengguna: String(item.Username),
                 peran: String(item.Role),

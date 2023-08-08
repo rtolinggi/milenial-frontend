@@ -29,7 +29,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 //     label: string;
 // }
 
-interface InputSelect extends SelectProps { };
+interface InputSelect extends SelectProps { }
 
 export default function SelectWithData({ ...props }: InputSelect) {
     // console.log("dari form input", formInput)

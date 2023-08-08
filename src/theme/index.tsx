@@ -51,4 +51,4 @@ export default function ThemeProvider({ children }: Props) {
             </MantineProvider>
         </ColorSchemeProvider>
     );
-};
+}

@@ -7,9 +7,9 @@ import { useDisclosure } from "@mantine/hooks";
 
 
 export default function AdminLayout() {
-    let matches = useMatches();
+    const matches = useMatches();
     const [opened, handlers] = useDisclosure(false);
-    let crumbs = matches
+    const crumbs = matches
         .filter((match: any) => Boolean(match.handle?.crumb))
         .map((match: any) => match.handle.crumb(match.data));
     return (

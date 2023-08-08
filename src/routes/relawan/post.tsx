@@ -204,6 +204,8 @@ export default function PostRelawan() {
         return (
             <Image
                 key={index}
+                maw={200}
+                mx='auto'
                 src={imageUrl}
                 imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
             />
@@ -387,10 +389,10 @@ export default function PostRelawan() {
                                             className={classes.dropzone}
                                             radius="md"
                                             accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
-                                            maxSize={30 * 1024 ** 2}
+                                            maxSize={1 * 1024 ** 2}
                                             {...form.getInputProps('avatar')}
                                         >
-                                            <div style={{ pointerEvents: 'none' }}>
+                                            <div style={{ pointerEvents: 'none', position: 'relative', overflow: 'hidden' }}>
                                                 <Group position="center">
                                                     <Dropzone.Accept>
                                                         <Download
@@ -418,9 +420,10 @@ export default function PostRelawan() {
                                                             <Dropzone.Idle>Unggah Foto</Dropzone.Idle>
                                                         </Text>
                                                         <Text ta="center" fz="sm" mt="xs" c="dimmed">
-                                                            Seret&apos;n&apos;Foto dalam kotak sini untuk di unggah. Ekstensi File harus <i>.jpg, png</i> ukuran foto maksimal 1MB
+                                                            Seret foto dalam kotak sini untuk di unggah. Ekstensi File harus <i>.jpg, png</i> ukuran foto maksimal 1MB
                                                         </Text>
-                                                    </> : previews}
+                                                    </> : previews
+                                                }
                                             </div>
                                         </Dropzone>
                                         {/* openRef.current?.() */}

@@ -18,6 +18,8 @@ import { Notifications } from '@mantine/notifications'
 import ContentRelawan from "./routes/relawan/ContentRelawan";
 import PostRelawan from "./routes/relawan/post";
 import DetailRelawan from "./routes/relawan/DetailRelawan";
+import TabelPendukung from "./routes/pendukung/TablePendukung";
+import PostPendukung from "./routes/pendukung/Post";
 
 export const queryClient = new QueryClient()
 
@@ -149,6 +151,23 @@ const router = createBrowserRouter(
               </Link>
             ),
           },
+          children: [
+            {
+              element: <TabelPendukung />,
+              index: true,
+            },
+            {
+              path: 'post',
+              element: <PostPendukung />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="#">
+                    Tambah
+                  </Link>
+                ),
+              },
+            },
+          ]
         },
         {
           path: "dpt",

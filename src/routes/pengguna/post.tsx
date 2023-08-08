@@ -108,8 +108,8 @@ export default function PostPengguna() {
                         <Divider mb='lg' mt='sm' />
                         <TextInput
                             withAsterisk
-                            label='Username'
-                            autoComplete='username'
+                            label='Nama Pengguna'
+                            autoComplete='Nama Pengguna'
                             icon={<User size={18} />}
                             {...form.getInputProps("username")}
                         />
