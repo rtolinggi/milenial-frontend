@@ -19,7 +19,7 @@ import ContentRelawan from "./routes/relawan/ContentRelawan";
 import PostRelawan from "./routes/relawan/post";
 import DetailRelawan from "./routes/relawan/DetailRelawan";
 import TabelPendukung from "./routes/pendukung/TablePendukung";
-import PostPendukung from "./routes/pendukung/Post";
+import PostPendukung from "./routes/pendukung/post";
 
 export const queryClient = new QueryClient()
 
