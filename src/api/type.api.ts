@@ -83,3 +83,8 @@ export interface Jabatan {
     nama_jabatan: string;
     keterangan: string;
 }
+
+export interface Address {
+    value: string;
+    label: string;
+}

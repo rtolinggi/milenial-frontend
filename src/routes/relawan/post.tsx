@@ -4,17 +4,17 @@ import { DateInput } from "@mantine/dates";
 import { Form, useNavigate } from "react-router-dom";
 import * as z from 'zod';
 import { DeviceFloppy, ArrowBack, Download, CloudUpload, Icons, AlertCircle, Check } from 'tabler-icons-react';
-import DataProvinsi from '../../../kota_kabupaten.json';
-import DataKecamatan from '../../../kecamatan.json';
-import DataKelurahan from '../../../kelurahan_desa.json';
-import { useRef, useState } from 'react';
+import DataCity from '../../../kota_kabupaten.json';
+import DataDistricts from '../../../kecamatan.json';
+import DataWards from '../../../kelurahan_desa.json';
+import { useEffect, useRef, useState } from 'react';
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 import { useMutation, useQuery } from "react-query";
 import { GetUsersWithRelawan } from "../../api/users.api";
 import { ResponseUsers } from "../pengguna/TablePengguna";
 import { useForm, zodResolver } from "@mantine/form";
 import SelectWithData from "../../components/SelectWithData";
-import { ErrorMutation, Jabatan } from "../../api/type.api";
+import { Address, ErrorMutation, Jabatan } from "../../api/type.api";
 import { notifications } from "@mantine/notifications";
 import { PostRelawanApi, UploadImageRelawan } from "../../api/relawan.api";
 import { GetJabatan } from "../../api/jabatan.api";
@@ -200,6 +200,9 @@ export default function PostRelawan() {
     const { classes, theme } = useStyles();
     const openRef = useRef<() => void>(null);
     const [files, setFiles] = useState<FileWithPath[]>([]);
+    const [dataCity, setDataCitys] = useState<Array<Address>>([]);
+    const [dataDistircts, setDataDistricts] = useState<Array<Address>>([]);
+    const [dataWards, setDataWards] = useState<Array<Address>>([]);
     const previews = files.map((file, index) => {
         const imageUrl = URL.createObjectURL(file);
         return (
@@ -213,26 +216,52 @@ export default function PostRelawan() {
         );
     });
 
-    const Provinces = DataProvinsi.map((provinsi) => {
-        return {
-            value: provinsi.id,
-            label: provinsi.name
-        }
-    });
+    useEffect(() => {
+        const Citys = DataCity.map((city) => {
+            return {
+                value: city.id,
+                label: city.name
+            }
+        });
+        // const Districts = DataDistricts.map((district) => {
+        //     return {
+        //         value: district.id,
+        //         label: district.name,
+        //     }
+        // });
+        // const Wards = DataWards.map((ward) => {
+        //     return {
+        //         value: ward.id,
+        //         label: ward.name,
+        //     }
+        // })
+        setDataCitys(Citys);
+        // setDataDistricts(Districts);
+        // setDataWards(Wards);
+    }, [])
 
-    const Districts = DataKecamatan.map((district) => {
-        return {
-            value: district.id,
-            label: district.name
-        }
-    })
 
-    const Wards = DataKelurahan.map((ward) => {
-        return {
-            value: ward.id,
-            label: ward.name,
-        }
-    })
+    const handleCitys = () => {
+        const idCity = String(form.getInputProps('id_kota_kabupaten').value)
+        const District = DataDistricts.map((district) => {
+            return {
+                value: district.id,
+                label: district.name.toUpperCase(),
+            }
+        }).filter((district) => district.value.includes(idCity))
+        setDataDistricts(District)
+    }
+
+    const handleDistrict = () => {
+        const idDistrict = String(form.getInputProps('id_kecamatan').value)
+        const Wards = DataWards.map((ward) => {
+            return {
+                value: ward.id,
+                label: ward.name.toUpperCase(),
+            }
+        }).filter((ward) => ward.value.includes(idDistrict))
+        setDataWards(Wards)
+    }
 
     const navigate = useNavigate();
     const handleSubmit = (val: InputForm) => {
@@ -329,7 +358,8 @@ export default function PostRelawan() {
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kota/Kabupaten tidak ditemukan"
-                                        data={Provinces}
+                                        data={dataCity}
+                                        onSelect={handleCitys}
                                         mt={'md'}
                                         {...form.getInputProps('id_kota_kabupaten')}
                                     />
@@ -338,8 +368,9 @@ export default function PostRelawan() {
                                         label="Pilih Kecamatan"
                                         placeholder="Pilih salah satu"
                                         searchable
-                                        nothingFound="Kkecamatan tidak ditemukan"
-                                        data={Districts}
+                                        nothingFound="kecamatan tidak ditemukan, pilih kota/kabupaten lebih dahulu"
+                                        data={dataDistircts}
+                                        onSelect={handleDistrict}
                                         mt={'md'}
                                         {...form.getInputProps('id_kecamatan')}
                                     />
@@ -349,7 +380,7 @@ export default function PostRelawan() {
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kelurahan tidak ditemukan"
-                                        data={Wards}
+                                        data={dataWards}
                                         mt={'md'}
                                         {...form.getInputProps('id_kelurahan_desa')}
                                     />
