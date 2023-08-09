@@ -20,6 +20,7 @@ import PostRelawan from "./routes/relawan/post";
 import DetailRelawan from "./routes/relawan/DetailRelawan";
 import TabelPendukung from "./routes/pendukung/TablePendukung";
 import PostPendukung from "./routes/pendukung/post";
+import TableDpt from "./routes/dpt/TableDpt";
 
 export const queryClient = new QueryClient()
 
@@ -179,6 +180,12 @@ const router = createBrowserRouter(
               </Link>
             ),
           },
+          children: [
+            {
+              element: <TableDpt />,
+              index: true,
+            },
+          ]
         },
       ]
     },

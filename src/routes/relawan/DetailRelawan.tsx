@@ -7,13 +7,24 @@ export default function DetailRelawan() {
     const { id } = useParams();
     const location = useLocation();
     const queryParams = location.state;
+
+    let page: any = 1;
+    let row: any = 10;
+
+    if (queryParams) {
+        page = queryParams.page;
+        row = queryParams.row;
+    }
+
     const queryData = queryClient.getQueryState<ResponseRelawanWithPagination>([
         "getRelawanPagination",
-        queryParams.page,
-        queryParams.row,
+        page,
+        row,
     ]);
+
     const data = queryData?.data;
     const relawan = data?.data.petugas.filter((val) => val.id === id)
+
     console.log(relawan)
     return (
         <>

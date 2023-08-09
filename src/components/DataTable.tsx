@@ -30,7 +30,7 @@ const DataTable: React.FC<Props> = ({ columns, data, visibility }) => {
     const [globalFilter, setGlobalFilter] = useState<string>("");
     const [columnVisibility, setColumnVisibility] = useState(visibility);
     const [pagination, setPagination] = useState<PaginationState>({
-        pageSize: 5,
+        pageSize: 20,
         pageIndex: 0,
     });
 
