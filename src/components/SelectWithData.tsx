@@ -24,23 +24,12 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
     )
 );
 
-// type Props = {
-//     data: data;
-//     label: string;
-// }
-
 interface InputSelect extends SelectProps { }
 
 export default function SelectWithData({ ...props }: InputSelect) {
-    // console.log("dari form input", formInput)
     return (
         <Select
-            // withAsterisk
-            // label={label}
-            // placeholder="Pilih salah satu"
             itemComponent={SelectItem}
-            // data={data}
-            // searchable
             maxDropdownHeight={400}
             nothingFound="Data Tidak Ditemukan"
             filter={(value, item) =>
@@ -48,7 +37,6 @@ export default function SelectWithData({ ...props }: InputSelect) {
                 item.description.toLowerCase().includes(value.toLowerCase().trim())
             }
             {...props}
-        // {...formInput.getInputProps('username')}
         />
     );
 }

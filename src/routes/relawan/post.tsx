@@ -223,21 +223,7 @@ export default function PostRelawan() {
                 label: city.name
             }
         });
-        // const Districts = DataDistricts.map((district) => {
-        //     return {
-        //         value: district.id,
-        //         label: district.name,
-        //     }
-        // });
-        // const Wards = DataWards.map((ward) => {
-        //     return {
-        //         value: ward.id,
-        //         label: ward.name,
-        //     }
-        // })
         setDataCitys(Citys);
-        // setDataDistricts(Districts);
-        // setDataWards(Wards);
     }, [])
 
 
@@ -248,7 +234,7 @@ export default function PostRelawan() {
                 value: district.id,
                 label: district.name.toUpperCase(),
             }
-        }).filter((district) => district.value.includes(idCity))
+        }).filter((district) => district.value.slice(0, 5) === idCity)
         setDataDistricts(District)
     }
 
@@ -259,7 +245,7 @@ export default function PostRelawan() {
                 value: ward.id,
                 label: ward.name.toUpperCase(),
             }
-        }).filter((ward) => ward.value.includes(idDistrict))
+        }).filter((ward) => ward.value.slice(0, 8) === idDistrict)
         setDataWards(Wards)
     }
 
@@ -354,6 +340,7 @@ export default function PostRelawan() {
                                     />
                                     <Select
                                         clearable
+                                        withAsterisk
                                         label="Pilih Kota/Kabupaten"
                                         placeholder="Pilih salah satu"
                                         searchable
@@ -365,6 +352,7 @@ export default function PostRelawan() {
                                     />
                                     <Select
                                         clearable
+                                        withAsterisk
                                         label="Pilih Kecamatan"
                                         placeholder="Pilih salah satu"
                                         searchable
@@ -376,6 +364,7 @@ export default function PostRelawan() {
                                     />
                                     <Select
                                         clearable
+                                        withAsterisk
                                         label="Pilih Kelurahan/Desa"
                                         placeholder="Pilih salah satu"
                                         searchable

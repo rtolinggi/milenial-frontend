@@ -88,3 +88,19 @@ export interface Address {
     value: string;
     label: string;
 }
+
+export interface Pekerjaan {
+    pekerjaan: {
+        id: string;
+        nama_pekerjaan: string;
+        keterangan: string;
+    }[]
+}
+
+export interface StatusDukungan {
+    status_dukungan: {
+        id: string;
+        status_dukungan: string;
+        keterangan: string;
+    }[]
+}

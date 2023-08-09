@@ -4,33 +4,36 @@ import { DateInput } from "@mantine/dates";
 import { Form, useNavigate } from "react-router-dom";
 import * as z from 'zod';
 import { DeviceFloppy, ArrowBack, Download, CloudUpload, Icons, AlertCircle, Check } from 'tabler-icons-react';
-import DataProvinsi from '../../../kota_kabupaten.json';
-import DataKecamatan from '../../../kecamatan.json';
-import DataKelurahan from '../../../kelurahan_desa.json';
-import { useRef, useState } from 'react';
+import DataCity from '../../../kota_kabupaten.json';
+import DataDistricts from '../../../kecamatan.json';
+import DataWards from '../../../kelurahan_desa.json';
+import { useEffect, useRef, useState } from 'react';
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 import { useMutation, useQuery } from "react-query";
-import { GetUsersWithRelawan } from "../../api/users.api";
-import { ResponseUsers } from "../pengguna/TablePengguna";
 import { useForm, zodResolver } from "@mantine/form";
 import SelectWithData from "../../components/SelectWithData";
-import { ErrorMutation, Jabatan } from "../../api/type.api";
+import { Address, ErrorMutation, Pekerjaan, ResponseApi, ResponseRelawan, StatusDukungan } from "../../api/type.api";
 import { notifications } from "@mantine/notifications";
-import { PostRelawanApi, UploadImageRelawan } from "../../api/relawan.api";
-import { GetJabatan } from "../../api/jabatan.api";
+import { GetRelawan } from "../../api/relawan.api";
+import { GetPekerjaan } from "../../api/pekerjaan.api";
+import { GetStatusDukungan } from "../../api/statusDukungan.api";
+import { PostPendukungApi } from "../../api/pendukung.api";
 
 const schema = z
     .object({
-        id_pengguna: z
+        id_petugas: z
             .string({ required_error: "type data karakter, tidak bisa kosong" })
             .nonempty({ message: "nama pengguna tidak bisa kosong" }),
         no_nik: z.string({ required_error: "type data karakter, tidak bisa kosong" })
             .min(6, { message: "nik harus 16 digit" }),
-        nama_lengkap: z
+        no_kk: z.string({ required_error: "type data karakter, tidak bisa kosong" })
+            .min(6, { message: "kk harus 16 digit" }),
+        nama_pendukung: z
             .string({ required_error: "type data karakter, tidak bisa kosong" })
             .nonempty({ message: "nama lengkap tidak bisa kosong" }),
-        jenis_kelamin: z.string({ invalid_type_error: 'pilih salah satu, tidak bisa kosong' })
-            .nonempty({ message: "jenis kelamin tidak bisa kosong" }),
+        tempat_lahir: z
+            .string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "nama lengkap tidak bisa kosong" }),
         tanggal_lahir: z.date().transform((val) => Date.parse(val.toISOString())),
         id_kota_kabupaten: z.string({ invalid_type_error: "pilih salah satu, tidak bisa kosong" }).
             nonempty({ message: "kota/kabupaten harus di isi, tidak bisa kosong" }),
@@ -38,12 +41,27 @@ const schema = z
             .nonempty({ message: "kecamatan harus di isi, tidak boleh kosong" }),
         id_kelurahan_desa: z.string({ invalid_type_error: "pilih salah satu, tidak bisa kosong" })
             .nonempty({ message: "kelurahan/desa harus di isi, tidak boleh kosong" }),
+        rt: z
+            .string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "rt tidak bisa kosong" }),
+        rw: z
+            .string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "rw tidak bisa kosong" }),
         alamat_lengkap: z.string({ invalid_type_error: "pilih salah satu, tidak bisa kosong" })
-            .nonempty({ message: "kelurahan/desa harus di isi, tidak boleh kosong" }),
-        telpon: z.string({ invalid_type_error: "type data karakter,  tidak bisa kosong" })
-            .nonempty({ message: "no telpon tidak bisa kosong" }),
-        id_jabatan: z.number({ invalid_type_error: "pilih salah satu, tidak bisa kosong" }),
-        avatar: z.any().optional(),
+            .nonempty({ message: "alamat lengkap harus di isi, tidak boleh kosong" }),
+        agama: z
+            .string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "agama tidak bisa kosong" }),
+        id_pekerjaan: z.number({ invalid_type_error: "pilih salah satu, tidak bisa kosong" }),
+        telpon: z
+            .string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "telpon tidak bisa kosong" }),
+        id_status_dukungan: z.number({ invalid_type_error: "pilih salah satu, tidak bisa kosong" }),
+        foto_nik: z.any().optional(),
+        foto_selfie: z.any().optional(),
+        valid_dpt: z.string(),
+        keterangan: z.string({ invalid_type_error: 'pilih salah satu, tidak bisa kosong' })
+            .optional()
     });
 
 export type InputForm = z.infer<typeof schema>;
@@ -74,119 +92,123 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-type ResponseJabatan = {
-    code: number;
-    data: {
-        jabatan_petugas: Array<Jabatan>
-    };
-    status: string;
-    message: string;
-    timestamp: string;
-}
-
 export default function PostPendukung() {
 
-    const { data: users } = useQuery<ResponseUsers>(
+    const { data: relawan } = useQuery<ResponseRelawan>(
         {
-            queryKey: ['GetUsersWithRelawan'],
-            queryFn: GetUsersWithRelawan,
-            // refetchInterval: 5000,
+            queryKey: ['GetRelawan'],
+            queryFn: GetRelawan,
         },
     );
 
-    const { data: jabatan } = useQuery<ResponseJabatan>({
-        queryKey: ["GetJabatan"],
-        queryFn: GetJabatan,
+    const { data: pekerjaan } = useQuery<ResponseApi<Pekerjaan>>({
+        queryKey: ["GetPekerjaan"],
+        queryFn: GetPekerjaan,
+    })
+
+    const { data: statusDukungan } = useQuery<ResponseApi<StatusDukungan>>({
+        queryKey: ["GetStatusDukungan"],
+        queryFn: GetStatusDukungan,
     })
 
     const form = useForm({
         validate: zodResolver(schema),
         initialValues: {
-            id_pengguna: "",
+            id_petugas: "",
             no_nik: "",
-            nama_lengkap: "",
-            jenis_kelamin: "",
+            no_kk: "",
+            nama_pendukung: "",
+            tempat_lahir: "",
             tanggal_lahir: new Date(),
             id_kota_kabupaten: "",
             id_kecamatan: "",
             id_kelurahan_desa: "",
+            rt: "",
+            rw: "",
             alamat_lengkap: "",
+            agama: "",
+            id_pekerjaan: "",
             telpon: "",
-            id_jabatan: "",
-            avatar: ""
+            id_status_dukungan: "",
+            foto_nik: "",
+            foto_selfie: "",
+            valid_dpt: "",
+            keterangan: ""
         },
+        transformValues: (values) => ({
+            ...values,
+            valid_dpt: Boolean(values.valid_dpt)
+        })
     });
 
     const mutation = useMutation({
-        mutationKey: ["PostRelawan"],
-        mutationFn: PostRelawanApi,
+        mutationKey: ["PostPendukung"],
+        mutationFn: PostPendukungApi,
         onError: (error: ErrorMutation) => {
             if (error?.code === 500) {
                 notifications.update({
-                    id: 'post-relawan',
+                    id: 'post-pendukung',
                     color: 'red',
                     title: 'Gagal Simpan Data',
                     autoClose: 5000,
-                    message: 'proses simpan data pengguna ke server gagal, terjadi masalah di server!',
+                    message: 'proses simpan data pendukung ke server gagal, terjadi masalah di server!',
                     icon: <AlertCircle size="1.5rem" />,
                 });
             }
 
             if (error?.code === 400) {
                 notifications.update({
-                    id: 'post-relawan',
+                    id: 'post-pendukung',
                     color: 'red',
                     title: 'Gagal Simpan Data',
                     autoClose: 5000,
-                    message: 'simpan data relawan ke server gagal, data yang di nput tidak valid!',
+                    message: 'simpan data pendukung ke server gagal, data yang di nput tidak valid!',
                     icon: <AlertCircle size="1.5rem" />,
                 });
             }
         },
         onSuccess: async () => {
             notifications.update({
-                id: 'post-relawan',
+                id: 'post-pendukung',
                 color: 'green',
                 title: 'Berhasil Simpan Data',
                 autoClose: 5000,
-                message: 'simpan data relawan ke server berhasil',
+                message: 'simpan data pendukung ke server berhasil',
                 icon: <Check size="1.5rem" />,
             });
-
-            const formData = new FormData()
-            formData.append("avatar", files[0]);
-
-            try {
-                if (users && files.length !== 0) {
-                    await UploadImageRelawan(users?.data.users[0].ID, formData)
-                    navigate(-1);
-                }
-            } catch (error) {
-                console.log(error)
-            }
-
         },
     })
 
-    const selectJabatan = jabatan?.data.jabatan_petugas.map((item) => {
+    const selectPekerjaan = pekerjaan?.data.pekerjaan.map((item) => {
         return {
-            label: item.nama_jabatan,
-            value: item.ID,
+            label: item.nama_pekerjaan,
+            value: item.id,
         }
     })
 
+    const selectStatusDukungan = statusDukungan?.data.status_dukungan.map((item) => {
+        return {
+            label: item.status_dukungan,
+            value: item.id,
+        }
+    })
 
-    const initJabatan = [{
+    const initPekerjaan = [{
         label: "",
         value: "",
     }]
 
-    const dataUsername = users?.data.users.map((user) => {
+    const initStatusDukungan = [{
+        label: "",
+        value: "",
+    }]
+
+    const dataUsername = relawan?.data.petugas.map((relawan) => {
         return {
-            image: "http://localhost:5000/public/foto-relawan/avatar.jpg",
-            label: user.Username,
-            value: user.ID,
-            description: user.Role,
+            image: relawan.avatar,
+            label: relawan.nama_lengkap,
+            value: relawan.id,
+            description: relawan.telpon,
         }
     })
 
@@ -198,9 +220,15 @@ export default function PostPendukung() {
     }]
 
     const { classes, theme } = useStyles();
-    const openRef = useRef<() => void>(null);
-    const [files, setFiles] = useState<FileWithPath[]>([]);
-    const previews = files.map((file, index) => {
+    const openRefNik = useRef<() => void>(null);
+    const openRefSelfie = useRef<() => void>(null);
+    const [filesNik, setFilesNik] = useState<FileWithPath[]>([]);
+    const [filesSelfie, setFilesSelfie] = useState<FileWithPath[]>([]);
+    const [dataCity, setDataCitys] = useState<Array<Address>>([]);
+    const [dataDistircts, setDataDistricts] = useState<Array<Address>>([]);
+    const [dataWards, setDataWards] = useState<Array<Address>>([]);
+
+    const previewsFotoNik = filesNik.map((file, index) => {
         const imageUrl = URL.createObjectURL(file);
         return (
             <Image
@@ -213,31 +241,56 @@ export default function PostPendukung() {
         );
     });
 
-    const Provinces = DataProvinsi.map((provinsi) => {
-        return {
-            value: provinsi.id,
-            label: provinsi.name
-        }
+    const previewsFotoSelfie = filesSelfie.map((file, index) => {
+        const imageUrl = URL.createObjectURL(file);
+        return (
+            <Image
+                key={index}
+                maw={200}
+                mx='auto'
+                src={imageUrl}
+                imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+            />
+        );
     });
 
-    const Districts = DataKecamatan.map((district) => {
-        return {
-            value: district.id,
-            label: district.name
-        }
-    })
+    useEffect(() => {
+        const Citys = DataCity.map((city) => {
+            return {
+                value: city.id,
+                label: city.name
+            }
+        });
+        setDataCitys(Citys);
+    }, [])
 
-    const Wards = DataKelurahan.map((ward) => {
-        return {
-            value: ward.id,
-            label: ward.name,
-        }
-    })
+    const handleCitys = () => {
+        const idCity = String(form.getInputProps('id_kota_kabupaten').value)
+        const District = DataDistricts.map((district) => {
+            return {
+                value: district.id,
+                label: district.name.toUpperCase(),
+            }
+        }).filter((district) => district.value.slice(0, 5) === idCity)
+        setDataDistricts(District)
+    }
+
+    const handleDistrict = () => {
+        const idDistrict = String(form.getInputProps('id_kecamatan').value)
+        const Wards = DataWards.map((ward) => {
+            return {
+                value: ward.id,
+                label: ward.name.toUpperCase(),
+            }
+        }).filter((ward) => ward.value.slice(0, 8) === idDistrict)
+        setDataWards(Wards)
+    }
 
     const navigate = useNavigate();
+
     const handleSubmit = (val: InputForm) => {
         notifications.show({
-            id: 'post-relawan',
+            id: 'post-pendukung',
             color: 'blue',
             loading: true,
             title: 'Simpan Data Relawan Berhasil',
@@ -245,7 +298,6 @@ export default function PostPendukung() {
             withCloseButton: false,
             message: 'proses simpan data relawan ke server',
         });
-
         const payload = {
             ...val,
             tanggal_lahir: Date.parse(val.tanggal_lahir.toString())
@@ -258,7 +310,7 @@ export default function PostPendukung() {
             <Box style={{ position: 'relative', width: '100%' }}>
                 <LoadingOverlay visible={mutation.isLoading} />
                 <Form onSubmit={
-                    form.onSubmit((val: any) => handleSubmit(val))
+                    form.onSubmit((e: any) => handleSubmit(e))
                 }  >
                     <Paper shadow='md' radius='md' px='20px' py='20px' sx={(theme) => ({
                         backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : undefined
@@ -283,7 +335,7 @@ export default function PostPendukung() {
                                         searchable
                                         maxDropdownHeight={400}
                                         data={dataUsername ? dataUsername : initData}
-                                        {...form.getInputProps('id_pengguna')}
+                                        {...form.getInputProps('id_petugas')}
                                     />
                                     <TextInput
                                         withAsterisk
@@ -296,27 +348,14 @@ export default function PostPendukung() {
                                         label='No KK'
                                         mt='md'
                                         placeholder="No KK..."
-                                        {...form.getInputProps('no_nik')}
+                                        {...form.getInputProps('no_kk')}
                                     />
                                     <TextInput
                                         withAsterisk
                                         label='Nama Lengkap'
                                         mt='md'
                                         placeholder="Nama Lengkap..."
-                                        {...form.getInputProps('nama_lengkap')}
-                                    />
-                                    <Select
-                                        withAsterisk
-                                        clearable
-                                        label='Jenis Kelamin'
-                                        mt='md'
-                                        placeholder="Jenis Kelamin..."
-                                        nothingFound="Kota/Kabupaten tidak ditemukan"
-                                        data={[
-                                            { label: "Laki-Laki", value: "Lk" },
-                                            { label: "Perepuan", value: "Pr" },
-                                        ]}
-                                        {...form.getInputProps('jenis_kelamin')}
+                                        {...form.getInputProps('nama_pendukung')}
                                     />
                                     <Select
                                         withAsterisk
@@ -331,14 +370,14 @@ export default function PostPendukung() {
                                             { label: "Budha", value: "budha" },
                                             { label: "Hindu", value: "hindu" },
                                         ]}
-                                        {...form.getInputProps('jenis_kelamin')}
+                                        {...form.getInputProps('agama')}
                                     />
                                     <TextInput
                                         withAsterisk
                                         label='Tempat Lahir'
                                         mt='md'
                                         placeholder="Tempat Lahir"
-                                        {...form.getInputProps('nama_lengkap')}
+                                        {...form.getInputProps('tempat_lahir')}
                                     />
                                     <DateInput
                                         clearable
@@ -357,7 +396,8 @@ export default function PostPendukung() {
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kota/Kabupaten tidak ditemukan"
-                                        data={Provinces}
+                                        onSelect={handleCitys}
+                                        data={dataCity}
                                         mt={'md'}
                                         {...form.getInputProps('id_kota_kabupaten')}
                                     />
@@ -367,7 +407,8 @@ export default function PostPendukung() {
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kkecamatan tidak ditemukan"
-                                        data={Districts}
+                                        onSelect={handleDistrict}
+                                        data={dataDistircts}
                                         mt={'md'}
                                         {...form.getInputProps('id_kecamatan')}
                                     />
@@ -377,7 +418,7 @@ export default function PostPendukung() {
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kelurahan tidak ditemukan"
-                                        data={Wards}
+                                        data={dataWards}
                                         mt={'md'}
                                         {...form.getInputProps('id_kelurahan_desa')}
                                     />
@@ -385,16 +426,16 @@ export default function PostPendukung() {
                                         <TextInput
                                             withAsterisk
                                             label='RT'
-                                            autoComplete='id_pengguna'
+                                            autoComplete='RT'
                                             placeholder="RT..."
-                                            {...form.getInputProps('telpon')}
+                                            {...form.getInputProps('rt')}
                                         />
                                         <TextInput
                                             withAsterisk
                                             label='RW'
-                                            autoComplete='id_pengguna'
+                                            autoComplete='RW'
                                             placeholder="RW..."
-                                            {...form.getInputProps('telpon')}
+                                            {...form.getInputProps('rw')}
                                         />
                                     </Group>
                                     <Textarea
@@ -414,7 +455,7 @@ export default function PostPendukung() {
                                     <TextInput
                                         withAsterisk
                                         label='Nomor Hp/Wa'
-                                        autoComplete='id_pengguna'
+                                        autoComplete='Nomor Hp'
                                         placeholder="Nomor Hp/Wa..."
                                         {...form.getInputProps('telpon')}
                                     />
@@ -424,9 +465,9 @@ export default function PostPendukung() {
                                         description='Pilih jenis Pekerjaan'
                                         label='Pekerjaan'
                                         placeholder='Pilih Salah Satu'
-                                        data={selectJabatan ? selectJabatan : initJabatan}
+                                        data={selectPekerjaan ? selectPekerjaan : initPekerjaan}
                                         mt='md'
-                                        {...form.getInputProps('id_jabatan')}
+                                        {...form.getInputProps('id_pekerjaan')}
                                     />
                                     <Select
                                         required
@@ -434,19 +475,37 @@ export default function PostPendukung() {
                                         description='Pilih status dukungan'
                                         label='Status Dukungan'
                                         placeholder='Pilih Salah Satu'
-                                        data={selectJabatan ? selectJabatan : initJabatan}
+                                        data={selectStatusDukungan ? selectStatusDukungan : initStatusDukungan}
                                         mt='md'
-                                        {...form.getInputProps('id_jabatan')}
+                                        {...form.getInputProps('id_status_dukungan')}
+                                    />
+                                    <Select
+                                        withAsterisk
+                                        clearable
+                                        label='Valid DPT'
+                                        mt='md'
+                                        placeholder="Valid DPT..."
+                                        data={[
+                                            { label: "Ya", value: "true" },
+                                            { label: "Tidak", value: "false" },
+                                        ]}
+                                        {...form.getInputProps('valid_dpt')}
+                                    />
+                                    <Textarea
+                                        placeholder="Keterangan..."
+                                        label="Keterangan"
+                                        mt="md"
+                                        {...form.getInputProps('keterangan')}
                                     />
                                     <div className={classes.wrapper}>
                                         <Dropzone
-                                            openRef={openRef}
-                                            onDrop={setFiles}
+                                            openRef={openRefNik}
+                                            onDrop={setFilesNik}
                                             className={classes.dropzone}
                                             radius="md"
                                             accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
                                             maxSize={1 * 1024 ** 2}
-                                            {...form.getInputProps('avatar')}
+                                            {...form.getInputProps('foto_nik')}
                                         >
                                             <div style={{ pointerEvents: 'none', position: 'relative', overflow: 'hidden' }}>
                                                 <Group position="center">
@@ -468,36 +527,36 @@ export default function PostPendukung() {
                                                         />
                                                     </Dropzone.Idle>
                                                 </Group>
-                                                {files.length === 0 ?
+                                                {filesNik.length === 0 ?
                                                     <>
                                                         <Text ta="center" fw={700} fz="lg" >
-                                                            <Dropzone.Accept>Drop files here</Dropzone.Accept>
+                                                            <Dropzone.Accept>Seret gambar kesini</Dropzone.Accept>
                                                             <Dropzone.Reject>Ukuran Foto Maksimal 1MB</Dropzone.Reject>
                                                             <Dropzone.Idle>Unggah Foto KTP</Dropzone.Idle>
                                                         </Text>
                                                         <Text ta="center" fz="sm" mt="xs" c="dimmed">
-                                                            Seret foto dalam kotak sini untuk di unggah. Ekstensi File harus <i>.jpg, png</i> ukuran foto maksimal 1MB
+                                                            Seret foto ke dalam kotak untuk di unggah. Ekstensi File harus <i>.jpg, png</i> ukuran foto maksimal 1MB
                                                         </Text>
-                                                    </> : previews
+                                                    </> : previewsFotoNik
                                                 }
                                             </div>
                                         </Dropzone>
                                         {/* openRef.current?.() */}
                                         <Button variant="gradient" className={classes.control} size="md" onClick={() => {
-                                            files.length === 0 ? openRef.current?.() : setFiles([])
+                                            filesNik.length === 0 ? openRefNik.current?.() : setFilesNik([])
                                         }}>
-                                            {files.length === 0 ? "Pilih Foto" : "Hapus Foto"}
+                                            {filesNik.length === 0 ? "Pilih Foto" : "Hapus Foto"}
                                         </Button>
                                     </div>
                                     <div className={classes.wrapper}>
                                         <Dropzone
-                                            openRef={openRef}
-                                            onDrop={setFiles}
+                                            openRef={openRefSelfie}
+                                            onDrop={setFilesSelfie}
                                             className={classes.dropzone}
                                             radius="md"
                                             accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
                                             maxSize={1 * 1024 ** 2}
-                                            {...form.getInputProps('avatar')}
+                                            {...form.getInputProps('foto_selfie')}
                                         >
                                             <div style={{ pointerEvents: 'none', position: 'relative', overflow: 'hidden' }}>
                                                 <Group position="center">
@@ -519,25 +578,25 @@ export default function PostPendukung() {
                                                         />
                                                     </Dropzone.Idle>
                                                 </Group>
-                                                {files.length === 0 ?
+                                                {filesSelfie.length === 0 ?
                                                     <>
                                                         <Text ta="center" fw={700} fz="lg" >
-                                                            <Dropzone.Accept>Drop files here</Dropzone.Accept>
+                                                            <Dropzone.Accept>Seret Foto Disini</Dropzone.Accept>
                                                             <Dropzone.Reject>Ukuran Foto Maksimal 1MB</Dropzone.Reject>
                                                             <Dropzone.Idle>Unggah Foto Lainya</Dropzone.Idle>
                                                         </Text>
                                                         <Text ta="center" fz="sm" mt="xs" c="dimmed">
-                                                            Seret foto dalam kotak sini untuk di unggah. Ekstensi File harus <i>.jpg, png</i> ukuran foto maksimal 1MB
+                                                            Seret foto kedalam kotak untuk di unggah. Ekstensi File harus <i>.jpg, png</i> ukuran foto maksimal 1MB
                                                         </Text>
-                                                    </> : previews
+                                                    </> : previewsFotoSelfie
                                                 }
                                             </div>
                                         </Dropzone>
                                         {/* openRef.current?.() */}
                                         <Button variant="gradient" className={classes.control} size="md" onClick={() => {
-                                            files.length === 0 ? openRef.current?.() : setFiles([])
+                                            filesSelfie.length === 0 ? openRefSelfie.current?.() : setFilesSelfie([])
                                         }}>
-                                            {files.length === 0 ? "Pilih Foto" : "Hapus Foto"}
+                                            {filesSelfie.length === 0 ? "Pilih Foto" : "Hapus Foto"}
                                         </Button>
                                     </div>
                                 </Paper>
