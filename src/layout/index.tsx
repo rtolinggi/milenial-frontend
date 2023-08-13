@@ -30,8 +30,8 @@ export default function AdminLayout() {
                 <Group position="apart" px="md">
                     <Breadcrumbs>{crumbs.map((crumb) => crumb)}</Breadcrumbs>
                 </Group>
-                <Outlet />
             </Flex>
+            <Outlet />
         </AppShell>
     )
 }

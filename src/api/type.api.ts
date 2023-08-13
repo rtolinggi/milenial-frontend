@@ -4,6 +4,11 @@ export type InputSignUp = {
     role: string;
 };
 
+export type InputSignIn = {
+    username: string;
+    password: string;
+}
+
 export type ErrorMutation = {
     code: number;
     data: null;
@@ -19,6 +24,13 @@ export type ResponseApi<T> = {
     timestamp: string;
 }
 
+export type ResponseSignIn = {
+    auth: {
+        access_token: string;
+        refresh_token: string;
+        created_at: number;
+    }
+}
 export type InputUpdateUser = {
     id: string;
     role: string;

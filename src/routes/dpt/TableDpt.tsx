@@ -3,19 +3,9 @@ import type { ColumnDef } from '@tanstack/react-table';
 import DataTable from '../../components/DataTable';
 import React from 'react';
 import { useQuery } from 'react-query';
-// import { DeleteUserByID, GetUsers } from '../../api/users.api';
-// import { AlertCircle, Check, UserPlus } from 'tabler-icons-react';
-// import ActionButton from '../../components/ActionButton';
-// import { useNavigate } from 'react-router-dom';
-// import { queryClient } from '../../App';
-// import { notifications } from '@mantine/notifications';
-// import { ErrorMutation } from '../../api/type.api';
 import { GetDpt } from '../../api/dpt.api';
-// import { UserPlus } from 'tabler-icons-react';
-// import ActionButton from '../../components/navbar/footer';
-// import { queryClient } from '../../App';
 
-type DataDpt = {
+export type DataDpt = {
     id: number;
     nama: string;
     jenis_kelamin: string;
@@ -134,20 +124,8 @@ export default function TableDpt() {
         [],
     );
 
-    // const navigate = useNavigate();
-
     return (
         <>
-            {/* <Paper shadow='sm' radius='md' w='100%' p={12} sx={(theme) => ({
-                backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : undefined
-            })}>
-                <Button leftIcon={<UserPlus size={18} />}
-                    variant='gradient'
-                    onClick={() => navigate("post")}
-                >
-                    Import
-                </Button>
-            </Paper> */}
             <Paper shadow='sm' radius='md' className={classes.container}>
                 <ScrollArea w={"100%"}>
                     <LoadingOverlay visible={isLoading} />

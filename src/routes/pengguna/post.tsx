@@ -5,7 +5,7 @@ import { User, Lock, DeviceFloppy, ArrowBack, Check, AlertCircle } from 'tabler-
 import { useForm, zodResolver } from "@mantine/form";
 import { useMutation } from "react-query";
 import { notifications } from "@mantine/notifications";
-import { PostUser } from "../../api/users.api";
+import { SignUp } from "../../api/auth.api";
 import { ErrorMutation } from "../../api/type.api";
 
 const ROLE = ['Admin', 'Relawan', 'Timsukses', 'Partai', 'Saksi'] as const;
@@ -41,7 +41,7 @@ export default function PostPengguna() {
         },
     });
     const mutation = useMutation({
-        mutationFn: PostUser,
+        mutationFn: SignUp,
         mutationKey: ["PostUser"],
         onError: (error: ErrorMutation) => {
             if (error?.code === 409) {

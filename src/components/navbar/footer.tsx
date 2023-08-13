@@ -7,6 +7,8 @@ import {
     createStyles,
 } from "@mantine/core";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { useAuth } from "../../context/AuthContext";
+import { SignOut } from "../../api/auth.api";
 
 const useStyles = createStyles((theme) => ({
     user: {
@@ -40,9 +42,12 @@ export default function NavFooter({
     ...others
 }: UserButtonProps) {
     const { classes } = useStyles();
-
+    const { signOut } = useAuth();
     return (
-        <UnstyledButton className={classes.user} {...others}>
+        <UnstyledButton onClick={() => {
+            signOut();
+            SignOut();
+        }} className={classes.user} {...others}>
             <Group>
                 <Avatar src={image} radius="xl" size="md" />
 

@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Group, Image, LoadingOverlay, Paper, Select, SimpleGrid, Text, TextInput, Textarea, Title, createStyles, rem } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useLocation, useNavigate } from "react-router-dom";
 import * as z from 'zod';
 import { DeviceFloppy, ArrowBack, Download, CloudUpload, Icons, AlertCircle, Check } from 'tabler-icons-react';
 import DataCity from '../../../kota_kabupaten.json';
@@ -19,6 +19,20 @@ import { GetPekerjaan } from "../../api/pekerjaan.api";
 import { GetStatusDukungan } from "../../api/statusDukungan.api";
 import { PostPendukungApi } from "../../api/pendukung.api";
 
+interface DataDpt {
+    prop: {
+        id: number;
+        nama: string;
+        jenis_kelamin: string;
+        usia: number;
+        kode_area: string;
+        desa_kelurahan: string;
+        rt: string;
+        rw: string;
+        tps: string;
+    }
+}
+
 const schema = z
     .object({
         id_petugas: z
@@ -31,6 +45,8 @@ const schema = z
         nama_pendukung: z
             .string({ required_error: "type data karakter, tidak bisa kosong" })
             .nonempty({ message: "nama lengkap tidak bisa kosong" }),
+        jenis_kelamin: z.string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "jenis kelamin harus di isi" }),
         tempat_lahir: z
             .string({ required_error: "type data karakter, tidak bisa kosong" })
             .nonempty({ message: "nama lengkap tidak bisa kosong" }),
@@ -59,7 +75,10 @@ const schema = z
         id_status_dukungan: z.number({ invalid_type_error: "pilih salah satu, tidak bisa kosong" }),
         foto_nik: z.any().optional(),
         foto_selfie: z.any().optional(),
-        valid_dpt: z.string(),
+        valid_dpt: z.string({ required_error: "type data tidak bisa kosong" })
+            .nonempty({ message: "pilih salah satu, tidak bisa kosong" }),
+        tps: z.string({ required_error: "type data karakter, tidak bisa kosong" })
+            .nonempty({ message: "tps tidak bisa kosong" }),
         keterangan: z.string({ invalid_type_error: 'pilih salah satu, tidak bisa kosong' })
             .optional()
     });
@@ -93,53 +112,31 @@ const useStyles = createStyles((theme) => ({
 
 
 export default function PostPendukung() {
+    const location = useLocation()
+    const data: DataDpt = location.state;
 
-    const { data: relawan } = useQuery<ResponseRelawan>(
+
+
+    const { data: relawan, isLoading: isLoadingRelawan } = useQuery<ResponseRelawan>(
         {
             queryKey: ['GetRelawan'],
             queryFn: GetRelawan,
         },
     );
 
-    const { data: pekerjaan } = useQuery<ResponseApi<Pekerjaan>>({
+    const { data: pekerjaan, isLoading: isLoadingPekerjaan } = useQuery<ResponseApi<Pekerjaan>>({
         queryKey: ["GetPekerjaan"],
         queryFn: GetPekerjaan,
     })
 
-    const { data: statusDukungan } = useQuery<ResponseApi<StatusDukungan>>({
+    const { data: statusDukungan, isLoading: isLoadingDukungan } = useQuery<ResponseApi<StatusDukungan>>({
         queryKey: ["GetStatusDukungan"],
         queryFn: GetStatusDukungan,
     })
 
-    const form = useForm({
-        validate: zodResolver(schema),
-        initialValues: {
-            id_petugas: "",
-            no_nik: "",
-            no_kk: "",
-            nama_pendukung: "",
-            tempat_lahir: "",
-            tanggal_lahir: new Date(),
-            id_kota_kabupaten: "",
-            id_kecamatan: "",
-            id_kelurahan_desa: "",
-            rt: "",
-            rw: "",
-            alamat_lengkap: "",
-            agama: "",
-            id_pekerjaan: "",
-            telpon: "",
-            id_status_dukungan: "",
-            foto_nik: "",
-            foto_selfie: "",
-            valid_dpt: "",
-            keterangan: ""
-        },
-        transformValues: (values) => ({
-            ...values,
-            valid_dpt: Boolean(values.valid_dpt)
-        })
-    });
+    const isLoading = isLoadingRelawan || isLoadingPekerjaan || isLoadingDukungan;
+
+
 
     const mutation = useMutation({
         mutationKey: ["PostPendukung"],
@@ -176,6 +173,7 @@ export default function PostPendukung() {
                 message: 'simpan data pendukung ke server berhasil',
                 icon: <Check size="1.5rem" />,
             });
+            navigate(-1);
         },
     })
 
@@ -305,10 +303,91 @@ export default function PostPendukung() {
         mutation.mutate(payload);
     };
 
+    let propDpt: DataDpt = {
+        prop: {
+            id: 0,
+            desa_kelurahan: "",
+            jenis_kelamin: "",
+            kode_area: "",
+            nama: "",
+            rt: "",
+            rw: "",
+            tps: "",
+            usia: 0
+        }
+    }
+
+    let initCity = [{
+        label: "",
+        value: "",
+    }]
+
+    let initDistrict = [{
+        label: "",
+        value: "",
+    }]
+
+    if (data) {
+        propDpt = {
+            prop: {
+                ...data.prop,
+            }
+        }
+        const idCity = propDpt.prop.kode_area.slice(0, 5);
+        const idDistrict = propDpt.prop.kode_area.slice(0, 8);
+        const initCityTemp = DataCity.map((val) => {
+            return {
+                label: val.name,
+                value: val.id,
+            }
+        }).filter((val) => val.value === idCity);
+        const initDistrictTemp = DataDistricts.map((val) => {
+            return {
+                label: val.name,
+                value: val.id,
+            }
+        }).filter((val) => val.value === idDistrict);
+        initCity = initCityTemp;
+        initDistrict = initDistrictTemp;
+    }
+
+    const form = useForm({
+        validate: zodResolver(schema),
+        initialValues: {
+            id_petugas: "",
+            no_nik: "",
+            no_kk: "",
+            nama_pendukung: propDpt.prop.nama,
+            jenis_kelamin: propDpt.prop.jenis_kelamin,
+            tempat_lahir: "",
+            tanggal_lahir: new Date(),
+            id_kota_kabupaten: initCity[0].value,
+            id_kecamatan: initDistrict[0].value,
+            id_kelurahan_desa: propDpt.prop.kode_area,
+            rt: propDpt.prop.rt,
+            rw: propDpt.prop.rw,
+            alamat_lengkap: "",
+            agama: "",
+            id_pekerjaan: "",
+            telpon: "",
+            id_status_dukungan: "",
+            foto_nik: "",
+            foto_selfie: "",
+            valid_dpt: propDpt.prop.id === 0 ? null : "true",
+            tps: propDpt.prop.tps,
+            keterangan: ""
+        },
+        transformValues: (values) => ({
+            ...values,
+            valid_dpt: Boolean(values.valid_dpt),
+            // id_kelurahan_desa: idKelurahan
+        })
+    });
+
     return (
         <>
             <Box style={{ position: 'relative', width: '100%' }}>
-                <LoadingOverlay visible={mutation.isLoading} />
+                <LoadingOverlay visible={mutation.isLoading || isLoading} />
                 <Form onSubmit={
                     form.onSubmit((e: any) => handleSubmit(e))
                 }  >
@@ -351,11 +430,32 @@ export default function PostPendukung() {
                                         {...form.getInputProps('no_kk')}
                                     />
                                     <TextInput
+                                        disabled={data ? true : false}
                                         withAsterisk
                                         label='Nama Lengkap'
                                         mt='md'
                                         placeholder="Nama Lengkap..."
                                         {...form.getInputProps('nama_pendukung')}
+                                    />
+                                    <Select
+                                        disabled={data ? true : false}
+                                        withAsterisk
+                                        clearable
+                                        label='Jenis Kelamin'
+                                        mt='md'
+                                        placeholder="Jenis Kelamin..."
+                                        data={data ? [
+                                            {
+                                                label: propDpt.prop.jenis_kelamin === "L" ? "Laki-Laki" : "Perempuan",
+                                                value: propDpt.prop.jenis_kelamin
+                                            }
+                                        ] :
+                                            [
+                                                { label: "Laki-Laki", value: "L" },
+                                                { label: "Perempuan", value: "P" }
+                                            ]
+                                        }
+                                        {...form.getInputProps('jenis_kelamin')}
                                     />
                                     <Select
                                         withAsterisk
@@ -391,39 +491,48 @@ export default function PostPendukung() {
                                         {...form.getInputProps('tanggal_lahir')}
                                     />
                                     <Select
+                                        disabled={data ? true : false}
+                                        withAsterisk
                                         clearable
                                         label="Pilih Kota/Kabupaten"
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kota/Kabupaten tidak ditemukan"
                                         onSelect={handleCitys}
-                                        data={dataCity}
+                                        data={data ? initCity : dataCity}
                                         mt={'md'}
                                         {...form.getInputProps('id_kota_kabupaten')}
                                     />
                                     <Select
+                                        disabled={data ? true : false}
+                                        withAsterisk
                                         clearable
                                         label="Pilih Kecamatan"
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kkecamatan tidak ditemukan"
                                         onSelect={handleDistrict}
-                                        data={dataDistircts}
+                                        data={data ? initDistrict : dataDistircts}
                                         mt={'md'}
                                         {...form.getInputProps('id_kecamatan')}
                                     />
                                     <Select
+                                        disabled={data ? true : false}
+                                        withAsterisk
                                         clearable
                                         label="Pilih Kelurahan/Desa"
                                         placeholder="Pilih salah satu"
                                         searchable
                                         nothingFound="Kelurahan tidak ditemukan"
-                                        data={dataWards}
+                                        data={data ? [{
+                                            value: data.prop.kode_area, label: data.prop.desa_kelurahan
+                                        }] : dataWards}
                                         mt={'md'}
                                         {...form.getInputProps('id_kelurahan_desa')}
                                     />
                                     <Group mt={10} grow>
                                         <TextInput
+                                            disabled={data ? true : false}
                                             withAsterisk
                                             label='RT'
                                             autoComplete='RT'
@@ -431,6 +540,7 @@ export default function PostPendukung() {
                                             {...form.getInputProps('rt')}
                                         />
                                         <TextInput
+                                            disabled={data ? true : false}
                                             withAsterisk
                                             label='RW'
                                             autoComplete='RW'
@@ -480,6 +590,7 @@ export default function PostPendukung() {
                                         {...form.getInputProps('id_status_dukungan')}
                                     />
                                     <Select
+                                        disabled={data ? true : false}
                                         withAsterisk
                                         clearable
                                         label='Valid DPT'
@@ -490,6 +601,14 @@ export default function PostPendukung() {
                                             { label: "Tidak", value: "false" },
                                         ]}
                                         {...form.getInputProps('valid_dpt')}
+                                    />
+                                    <TextInput
+                                        disabled={data ? true : false}
+                                        withAsterisk
+                                        label='TPS'
+                                        autoComplete='TPS'
+                                        placeholder="TPS..."
+                                        {...form.getInputProps('tps')}
                                     />
                                     <Textarea
                                         placeholder="Keterangan..."

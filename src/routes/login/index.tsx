@@ -12,8 +12,15 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import logo from "../../assets/logo.png";
 import { z } from "zod";
-import { Form } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { HiOutlineLockClosed, HiOutlineUser } from "react-icons/hi2"
+import { useAuth } from "../../context/AuthContext";
+import { useMutation } from "react-query";
+import { SignIn } from "../../api/auth.api";
+import { InputSignIn, ResponseApi, ResponseSignIn } from "../../api/type.api";
+import { notifications } from "@mantine/notifications";
+import { AlertCircle, Check } from "tabler-icons-react";
+import { useEffect } from 'react';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -63,6 +70,8 @@ const schema = z.object({
 
 const AuthLayout: React.FC = () => {
     const { classes } = useStyles();
+    const navigate = useNavigate();
+    const { signIn, isAuth, signOut } = useAuth();
     const form = useForm({
         validate: zodResolver(schema),
         initialValues: {
@@ -70,6 +79,50 @@ const AuthLayout: React.FC = () => {
             password: '',
         },
     });
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/admin/beranda');
+        }
+    }, [isAuth]);
+
+    const mutation = useMutation(SignIn, {
+        onError: () => {
+            signOut();
+            notifications.update({
+                id: 'post-login',
+                color: 'red',
+                title: 'Gagal Login',
+                autoClose: 5000,
+                message: 'nama pengguna atau kata sandi tidak sesuai!',
+                icon: <AlertCircle size="1.5rem" />,
+            });
+        },
+        onSuccess: async (data: ResponseApi<ResponseSignIn>) => {
+            signIn(data.data.auth.access_token)
+            notifications.update({
+                id: 'post-login',
+                color: 'green',
+                title: 'Berhasil masuk',
+                autoClose: 5000,
+                message: 'nama pengguna dan kata sandi sesuai!',
+                icon: <Check size="1.5rem" />,
+            });
+        }
+    })
+
+    const handleSubmit = (val: InputSignIn) => {
+        notifications.show({
+            id: 'post-login',
+            color: 'blue',
+            loading: true,
+            title: 'Proses Login',
+            autoClose: !mutation.isLoading,
+            withCloseButton: false,
+            message: 'proses login pengguna',
+        });
+        mutation.mutate(val)
+    }
 
     return (
         <Box className={classes.root}>
@@ -96,7 +149,7 @@ const AuthLayout: React.FC = () => {
                         </Center>
                         <Divider my='xs' label={'Selamat Datang'} labelPosition='center' />
                         <Space h='md' />
-                        <Form onSubmit={() => { }}>
+                        <Form onSubmit={form.onSubmit(val => handleSubmit(val))}>
                             <TextInput
                                 withAsterisk
                                 label='Nama Pengguna'

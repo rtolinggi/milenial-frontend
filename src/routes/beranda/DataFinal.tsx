@@ -3,7 +3,7 @@ import { ArrowUpRight, ArrowDownRight } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
     root: {
-        padding: `calc(${theme.spacing.xl} * 1.5)`,
+        padding: `calc(${theme.spacing.xl} * 2)`,
     },
 
     label: {
@@ -52,7 +52,7 @@ export default function DataFinal({ data }: StatsGridIconsProps) {
 
     return (
         <div className={classes.root}>
-            <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+            <SimpleGrid w={'100%'} cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                 {stats}
             </SimpleGrid>
         </div>

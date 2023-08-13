@@ -21,6 +21,10 @@ import DetailRelawan from "./routes/relawan/DetailRelawan";
 import TabelPendukung from "./routes/pendukung/TablePendukung";
 import PostPendukung from "./routes/pendukung/post";
 import TableDpt from "./routes/dpt/TableDpt";
+import CekDpt from "./routes/pendukung/CekDpt";
+import { AuthContextProvider } from './context/AuthContext';
+import Route, { loader as RouteLoader } from './routes/index';
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export const queryClient = new QueryClient()
 
@@ -28,11 +32,20 @@ const router = createBrowserRouter(
   [
     {
       path: "/",
+      element: <Route />,
+      loader: RouteLoader
+    },
+    {
+      path: "/login",
       element: <LoginPage />
     },
     {
       path: "/admin",
-      element: <AdminLayout />,
+      element: (
+        <ProtectedRoute>
+          <AdminLayout />
+        </ProtectedRoute>
+      ),
       handle: {
         crumb: () => (
           <Link key={Math.random()} to="/admin">
@@ -168,6 +181,17 @@ const router = createBrowserRouter(
                 ),
               },
             },
+            {
+              path: 'dpt',
+              element: <CekDpt />,
+              handle: {
+                crumb: () => (
+                  <Link key={Math.random()} to="http://localost:3000/admin/pendukung/post">
+                    Cek Daftar Pemilih Tetap
+                  </Link>
+                ),
+              },
+            }
           ]
         },
         {
@@ -201,13 +225,15 @@ const router = createBrowserRouter(
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <ModalsProvider>
-          <Notifications position="top-right" />
-          <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen />
-        </ModalsProvider>
-      </ThemeProvider >
+      <AuthContextProvider>
+        <ThemeProvider>
+          <ModalsProvider>
+            <Notifications position="top-right" />
+            <RouterProvider router={router} />
+            <ReactQueryDevtools initialIsOpen />
+          </ModalsProvider>
+        </ThemeProvider >
+      </AuthContextProvider>
     </QueryClientProvider>
   )
 }

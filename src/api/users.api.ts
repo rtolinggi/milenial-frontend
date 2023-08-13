@@ -1,6 +1,6 @@
 import { instance } from './axios.api';
 import { AxiosError } from 'axios'
-import type { InputSignUp, InputUpdateUser } from './type.api';
+import type { InputUpdateUser } from './type.api';
 
 
 export const GetUsers = async () => {
@@ -34,17 +34,6 @@ export const GetUsersByid = async (id: string) => {
         const err = error as AxiosError;
         throw err.response?.data;
     }
-}
-export const PostUser = async (payload: InputSignUp) => {
-    try {
-        const result = await instance.post('auth/signup', payload);
-        const response = await result.data;
-        return response;
-    } catch (error) {
-        const err = error as AxiosError;
-        throw err.response?.data;
-    }
-
 }
 
 export const UpdateUserByID = async (payload: InputUpdateUser) => {
